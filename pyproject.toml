@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rhokp"
+version = "0.1.0"
+description = "Red Hat Offline Knowledge Portal retrieval for RAG and AI agents"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "rrbanda" }]
+keywords = ["redhat", "okp", "rag", "mcp", "llm"]
+
+[project.optional-dependencies]
+mcp = ["fastapi>=0.100.0", "uvicorn[standard]>=0.22.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

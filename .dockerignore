@@ -1,0 +1,20 @@
+# Do not send these to the build context (no secrets or local junk)
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+__pycache__
+*.pyc
+.venv
+venv
+*.egg-info
+.pytest_cache
+.coverage
+htmlcov
+.idea
+.vscode
+docs/
+PLAN.md
+LICENSE
+containers/

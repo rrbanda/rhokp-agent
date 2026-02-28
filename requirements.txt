@@ -1,0 +1,4 @@
+# Demo (ask_okp.py) uses stdlib only; no extra deps.
+# MCP server dependencies (install when using mcp_server/):
+# fastapi>=0.100.0
+# uvicorn[standard]>=0.22.0
