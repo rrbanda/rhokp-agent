@@ -2,6 +2,12 @@
 
 MCP server and demo client run as separate UBI-based containers.
 
+**Pre-built images (Quay):**
+- `quay.io/rbrhssa/rhokp-mcp:latest`
+- `quay.io/rbrhssa/rhokp-demo:latest`
+
+Use these in place of `rhokp-mcp` / `rhokp-demo` if you don't build locally (e.g. `podman run ... quay.io/rbrhssa/rhokp-mcp:latest`).
+
 - **Full plan (design, networking, secrets):** [../docs/podman-ubi-plan.md](../docs/podman-ubi-plan.md)
 - **Step-by-step (verified run order):** [../docs/containers-step-by-step.md](../docs/containers-step-by-step.md)
 

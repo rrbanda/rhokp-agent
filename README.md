@@ -44,7 +44,7 @@ No API keys or internal URLs are stored in the repo; configuration is via enviro
 | [src/rhokp/](src/rhokp/) | OKP retrieval library (`retrieve()`). |
 | [mcp_server/](mcp_server/) | MCP server for the `search_red_hat_docs` tool. |
 | [demo/](demo/) | Demo: OKP + Llama Stack Responses API. |
-| [docs/](docs/) | [Architecture](docs/architecture.md) and [running](docs/running.md) notes. |
+| [docs/](docs/) | [Architecture](docs/architecture.md), [running](docs/running.md), and [OSS roadmap](docs/oss-roadmap.md). |
 | [.env.example](.env.example) | Example environment variables (copy to `.env`; do not commit). |
 
 ## Requirements
