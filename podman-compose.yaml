@@ -1,0 +1,96 @@
+# Podman / Docker Compose for RHOKP.
+#
+# Services:
+#   rhokp       - Red Hat Offline Knowledge Portal (Solr + httpd)  :8080
+#   mcp-server  - MCP server exposing RHOKP search tools           :8010
+#   adk-web     - Google ADK agent + web UI                        :8000
+#
+# Usage:
+#   # Full stack (OKP + MCP + agent web UI):
+#   cp .env.example .env   # then fill in real values
+#   podman-compose up
+#
+#   # Core only (OKP + MCP server, no agent):
+#   podman-compose up rhokp mcp-server
+#
+# Secrets / environment variables:
+#   This compose file reads sensitive values from the shell environment.
+#   The recommended approach is to copy .env.example to .env and populate it
+#   with real values.  Never commit .env — it is gitignored.
+#
+#   Required:
+#     ACCESS_KEY           - OKP decryption key (for rhokp container)
+#     LLAMA_STACK_BASE_URL - Llama Stack inference endpoint (for adk-web)
+#
+#   For OpenShift deployments, use deploy/openshift/ manifests instead.
+#   See deploy/README.md for full instructions.
+#
+# Requires:
+#   - RHOKP image access (registry.redhat.io subscription + ACCESS_KEY)
+#   - Llama Stack endpoint reachable from host network
+
+services:
+  rhokp:
+    image: registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:latest
+    container_name: rhokp
+    ports:
+      - "8080:8080"
+    environment:
+      - ACCESS_KEY=${ACCESS_KEY:-}
+      - SOLR_MEM=${SOLR_MEM:-1g}
+    mem_limit: 4g
+    networks:
+      - rhokpnet
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/solr/portal/select?q=test&rows=0&wt=json"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  mcp-server:
+    image: quay.io/rbrhssa/rhokp-mcp:latest
+    build:
+      context: .
+      dockerfile: containers/mcp-server/Dockerfile
+    container_name: mcp-server
+    ports:
+      - "8010:8010"
+    environment:
+      - RHOKP_BASE_URL=http://rhokp:8080
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8010
+    depends_on:
+      rhokp:
+        condition: service_healthy
+    networks:
+      - rhokpnet
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8010/mcp', timeout=5)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  adk-web:
+    image: quay.io/rbrhssa/rhokp-adk:latest
+    build:
+      context: .
+      dockerfile: containers/adk-agent/Dockerfile
+    container_name: adk-web
+    ports:
+      - "8000:8000"
+    environment:
+      - LLAMA_STACK_BASE_URL=${LLAMA_STACK_BASE_URL}
+      - MODEL=${MODEL:-gemini/models/gemini-2.5-pro}
+      - MCP_SERVER_URL=http://mcp-server:8010/mcp
+      - RHOKP_BASE_URL=http://rhokp:8080
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    networks:
+      - rhokpnet
+
+networks:
+  rhokpnet:
+    driver: bridge

@@ -4,16 +4,60 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rhokp"
-version = "0.1.0"
+version = "0.5.0"
 description = "Red Hat Offline Knowledge Portal retrieval for RAG and AI agents"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 authors = [{ name = "rrbanda" }]
 keywords = ["redhat", "okp", "rag", "mcp", "llm"]
+dependencies = ["httpx>=0.27.0"]
+
+[project.scripts]
+rhokp = "rhokp.__main__:main"
+rhokp-mcp = "rhokp.mcp.server:main"
 
 [project.optional-dependencies]
-mcp = ["fastapi>=0.100.0", "uvicorn[standard]>=0.22.0"]
+mcp = ["fastmcp>=3.0.0"]
+langchain = ["langchain-core>=0.3.0,<0.4"]
+observability = ["opentelemetry-api>=1.20.0"]
+adk = ["google-adk>=1.0.0", "llama-stack-client>=0.2.0,<0.4.0"]
+reranking = ["sentence-transformers>=3.0.0"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.8.0",
+    "mypy>=1.8.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.coverage.run]
+source = ["rhokp"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "pass",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100

@@ -15,6 +15,5 @@ htmlcov
 .idea
 .vscode
 docs/
-PLAN.md
 LICENSE
 containers/

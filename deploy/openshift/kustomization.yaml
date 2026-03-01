@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: rhokp
+    includeSelectors: false
+
+resources:
+  - secret-template.yaml
+  - rhokp.yaml
+  - mcp-server.yaml
+  - adk-web.yaml

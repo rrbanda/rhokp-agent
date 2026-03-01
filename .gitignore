@@ -49,6 +49,8 @@ htmlcov/
 .tox/
 .nox/
 
-# Optional: uncomment if you add these
-# mypy/
-# .mypy_cache/
+# Type checking
+.mypy_cache/
+
+# ADK local state
+agent/.adk/

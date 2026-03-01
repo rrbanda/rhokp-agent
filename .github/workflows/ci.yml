@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dev tools
+        run: pip install -e ".[dev]"
+
+      - name: Lint with ruff
+        run: ruff check src/ tests/ agent/ eval/ --output-format=github
+
+      - name: Format check with ruff
+        run: ruff format --check src/ tests/ agent/ eval/
+
+      - name: Type check with mypy
+        run: mypy src/rhokp/
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package with langchain and dev extras
+        run: pip install -e ".[langchain,dev]"
+
+      - name: Run tests with coverage
+        run: pytest tests/ -v --tb=short --cov=rhokp --cov-report=term-missing --cov-fail-under=80
+
+  test-core-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package (no optional extras)
+        run: pip install -e ".[dev]"
+
+      - name: Run tests (retriever tests will be skipped)
+        run: pytest tests/ -v --tb=short
+
+  container-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build MCP server image
+        run: docker build -f containers/mcp-server/Dockerfile -t rhokp-mcp:ci .
+
+      - name: Scan MCP server image for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: rhokp-mcp:ci
+          severity: CRITICAL,HIGH
+          exit-code: 1
+
+      - name: Build ADK agent image
+        run: docker build -f containers/adk-agent/Dockerfile -t rhokp-adk:ci .
+
+      - name: Scan ADK agent image for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: rhokp-adk:ci
+          severity: CRITICAL,HIGH
+          exit-code: 1

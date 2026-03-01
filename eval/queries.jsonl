@@ -1,0 +1,45 @@
+{"query": "How to install OpenShift Container Platform 4.16", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL 9 system requirements", "expected_kinds": ["documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "Configure firewall rules RHEL", "expected_kinds": ["solution", "documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift networking OVN-Kubernetes", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "Ansible Automation Platform installation guide", "expected_kinds": ["documentation"], "expected_product": "Ansible Automation Platform"}
+{"query": "CVE-2024-1086 kernel vulnerability", "expected_kinds": ["cve", "errata"], "expected_product": ""}
+{"query": "upgrade RHEL 8 to RHEL 9", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift route TLS termination", "expected_kinds": ["documentation", "solution"], "expected_product": "OpenShift Container Platform"}
+{"query": "podman rootless containers", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "SELinux troubleshooting denied access", "expected_kinds": ["solution", "documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "Red Hat Satellite content management", "expected_kinds": ["documentation"], "expected_product": "Red Hat Satellite"}
+{"query": "OpenShift operator lifecycle manager", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL subscription manager registration", "expected_kinds": ["solution", "documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift persistent volume claims", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "kernel panic crash dump analysis", "expected_kinds": ["solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift cluster autoscaler configuration", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL yum repository configuration", "expected_kinds": ["solution", "documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "Red Hat Identity Management LDAP integration", "expected_kinds": ["documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift image registry configuration", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL network bonding configuration", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift etcd backup and restore", "expected_kinds": ["documentation", "solution"], "expected_product": "OpenShift Container Platform"}
+{"query": "Red Hat Ceph Storage deployment", "expected_kinds": ["documentation"], "expected_product": "Red Hat Ceph Storage"}
+{"query": "OpenShift monitoring Prometheus alerting", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL disk partitioning LVM", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift service mesh Istio", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "FIPS 140-2 compliance Red Hat", "expected_kinds": ["documentation", "solution"], "expected_product": ""}
+{"query": "Red Hat Advanced Cluster Security vulnerability management", "expected_kinds": ["documentation"], "expected_product": "Red Hat Advanced Cluster Security for Kubernetes"}
+{"query": "OpenShift Virtualization VM migration", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL system roles ansible", "expected_kinds": ["documentation"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift GitOps ArgoCD deployment", "expected_kinds": ["documentation"], "expected_product": "Red Hat OpenShift GitOps"}
+{"query": "Red Hat Quay container registry setup", "expected_kinds": ["documentation"], "expected_product": "Red Hat Quay"}
+{"query": "OpenShift Data Foundation storage classes", "expected_kinds": ["documentation"], "expected_product": "Red Hat OpenShift Data Foundation"}
+{"query": "RHEL kickstart automated installation", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift build strategies source-to-image", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "Red Hat SSO Keycloak SAML configuration", "expected_kinds": ["documentation", "solution"], "expected_product": ""}
+{"query": "OpenShift node maintenance drain", "expected_kinds": ["documentation", "solution"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL chrony NTP time synchronization", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift custom resource definitions CRD", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "Red Hat AMQ Streams Kafka configuration", "expected_kinds": ["documentation"], "expected_product": "Red Hat AMQ Streams"}
+{"query": "OpenShift pod security admission", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL system tuning performance optimization", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift cert-manager certificate management", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "RHEL container tools buildah skopeo", "expected_kinds": ["documentation", "solution"], "expected_product": "Red Hat Enterprise Linux"}
+{"query": "OpenShift serverless Knative functions", "expected_kinds": ["documentation"], "expected_product": "OpenShift Container Platform"}
+{"query": "Red Hat OpenStack Platform director deployment", "expected_kinds": ["documentation"], "expected_product": "Red Hat OpenStack Platform"}

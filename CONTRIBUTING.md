@@ -4,9 +4,9 @@ Thank you for your interest in contributing.
 
 ## Code and pull requests
 
-- Use Python 3.9+ compatible code.
+- Use Python 3.10+ compatible code.
 - Do **not** add secrets, API keys, or internal URLs to the repository. Configuration is via environment variables only; document new variables in `.env.example`.
-- Keep the scope focused: OKP retrieval, MCP server for OKP search, and demos that use OKP with an LLM backend.
+- Keep the scope focused: OKP retrieval library, MCP server for OKP search, and the ADK agent.
 
 ## Submitting changes
 

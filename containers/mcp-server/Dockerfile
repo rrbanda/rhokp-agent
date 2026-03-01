@@ -1,17 +1,20 @@
-# MCP server for OKP search (UBI 9 + Python 3.9)
+# MCP server for OKP search
 # Build from repo root: podman build -f containers/mcp-server/Dockerfile -t rhokp-mcp .
 
-FROM registry.redhat.io/ubi9/python-39:latest
+FROM docker.io/library/python:3.12-slim
 
-USER 0
-RUN pip install --no-cache-dir 'fastapi>=0.100.0' 'uvicorn[standard]>=0.22.0'
+RUN groupadd -r rhokp && useradd -r -g rhokp -d /app rhokp
 
 WORKDIR /app
+COPY pyproject.toml /app/
 COPY src/           /app/src/
-COPY mcp_server/    /app/mcp_server/
 
-ENV PYTHONPATH=/app/src
+RUN pip install --no-cache-dir /app[mcp]
+
 EXPOSE 8010
 
-USER 1001
-CMD ["uvicorn", "mcp_server.server:app", "--host", "0.0.0.0", "--port", "8010"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD python -c "import httpx; httpx.get('http://localhost:8010/mcp', timeout=5)" || exit 1
+
+USER rhokp
+CMD ["rhokp-mcp"]

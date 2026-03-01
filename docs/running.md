@@ -1,74 +1,87 @@
-# Running OKP and the demo
+# Running RHOKP
 
-## Red Hat Offline Knowledge Portal (OKP)
+## Quick start (Podman / Docker Compose)
+
+The fastest path to a working OKP + MCP server:
+
+```bash
+# Core services only (OKP + MCP server)
+podman-compose up rhokp mcp-server
+
+# Full stack (adds ADK web UI -- needs LLAMA_STACK_BASE_URL)
+cp agent/.env.example agent/.env   # fill in your values
+podman-compose --profile full up
+```
+
+This starts:
+
+| Service | Port | Description |
+|---------|------|-------------|
+| `rhokp` | 8080 | Red Hat Offline Knowledge Portal (Solr) |
+| `mcp-server` | 8010 | MCP server exposing `search_red_hat_docs` |
+| `adk-web` | 8000 | Google ADK web UI (optional, `full` profile) |
+
+Solr needs 1--2 minutes to initialize. The MCP server waits for the OKP
+health check to pass before starting.
+
+## Running OKP standalone
 
 OKP runs as a container. You need:
 
-- Red Hat registry access and an **OKP access key** (for encrypted content). Do not commit the key; set it when starting the container.
+- Red Hat registry access and an **OKP access key** (for encrypted content). Do not commit the key; pass it at runtime.
 - Sufficient memory for Solr (recommended: 4 GB container memory, 1 GB for Solr).
 
-### Example: Podman
-
 ```bash
-podman run --rm -p 8080:8080 -p 8443:8443 --memory=4g \
+podman run --rm -p 8080:8080 --memory=4g \
   -e ACCESS_KEY=<your_access_key> \
   -e SOLR_MEM=1g \
   -d registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:latest
 ```
 
-Wait a few minutes for Solr to come up. Then:
+Wait 1--2 minutes for Solr to come up, then verify:
 
-- HTTP: `http://127.0.0.1:8080`
-- HTTPS: `https://127.0.0.1:8443`
+```bash
+curl "http://localhost:8080/solr/portal/select?q=test&rows=1&wt=json"
+```
 
-Search API: `GET http://127.0.0.1:8080/solr/portal/select?q=<query>&rows=5&wt=json&hl=true&hl.fl=main_content,title&hl.snippets=2&hl.fragsize=300`
+## MCP server
+
+Run locally (no container):
+
+```bash
+pip install -e .[mcp]
+export RHOKP_BASE_URL=http://127.0.0.1:8080
+rhokp-mcp
+```
+
+Or use the pre-built container:
+
+```bash
+podman run -d --name rhokp-mcp -p 8010:8010 \
+  -e RHOKP_BASE_URL=http://<okp-host>:8080 \
+  quay.io/rbrhssa/rhokp-mcp:latest
+```
+
+The MCP endpoint is `http://localhost:8010/mcp` (JSON-RPC over HTTP).
+
+## Retrieval CLI
+
+```bash
+pip install -e .
+python -m rhokp "install OpenShift"
+python -m rhokp --verbose "RHEL 9 kernel tuning"    # debug logging
+python -m rhokp --context-only "ansible automation"  # LLM context only
+```
 
 ## Environment variables
 
 Copy [.env.example](../.env.example) to `.env` (do not commit `.env`) and set:
 
-| Variable           | Description |
-|--------------------|-------------|
-| `RHOKP_BASE_URL`   | OKP base URL (default `http://127.0.0.1:8080`). |
-| `RHOKP_RAG_ROWS`   | Max doc snippets to retrieve (optional; default 5). |
-| `LLAMA_STACK_BASE` | Your Llama Stack base URL (for the demo). |
-| `MODEL`            | Model identifier from `GET /v1/models` (optional; demo has a default). |
-| `RHOKP_USE_TOOLS`  | Demo: pass `tools` (e.g. web_search) to Responses API; set to `0` to disable (default 1). |
-
-## Retrieval CLI
-
-From the repository root, either install the package or set `PYTHONPATH`:
-
-```bash
-pip install -e .   # then:
-python -m rhokp "install OpenShift"
-
-# Or without installing:
-PYTHONPATH=src python -m rhokp "install OpenShift"
-```
-
-Prints JSON with `query`, `numFound`, `docs`, and `context`.
-
-## Demo (Responses API)
-
-From the repository root:
-
-```bash
-export LLAMA_STACK_BASE=https://your-llama-stack-url
-export RHOKP_BASE_URL=http://127.0.0.1:8080
-python demo/ask_okp.py "How do I install OpenShift on bare metal?"
-```
-
-See [demo/README.md](../demo/README.md) for more detail.
-
-## MCP server (optional)
-
-From the repository root:
-
-```bash
-pip install -r mcp_server/requirements.txt
-export RHOKP_BASE_URL=http://127.0.0.1:8080
-uvicorn mcp_server.server:app --host 0.0.0.0 --port 8010
-```
-
-Then register the server URL with your Llama Stack as an MCP tool group and create an agent that uses the `okp-search` tool group. See [mcp_server/README.md](../mcp_server/README.md).
+| Variable | Description |
+|----------|-------------|
+| `RHOKP_BASE_URL` | OKP base URL (default `http://127.0.0.1:8080`). |
+| `RHOKP_RAG_ROWS` | Max doc snippets to retrieve (default 5). |
+| `MCP_HOST` | MCP server bind address (default `0.0.0.0`). |
+| `MCP_PORT` | MCP server port (default `8010`). |
+| `LLAMA_STACK_BASE_URL` | Llama Stack base URL (for ADK agent). |
+| `MODEL` | Model identifier (default `gemini/models/gemini-2.5-pro`). |
